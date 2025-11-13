@@ -3,126 +3,176 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Project Chimera - Donation Drive</title>
-    
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Google Font (Inter) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
-
+    <title>Penguin Rescue</title>
     <style>
-        /* * Set the default font for the page
-         */
         body {
-            font-family: 'Inter', sans-serif;
-            
-            /* * === IMPORTANT ===
-             * This is a clean background image of Antarctica as requested.
-             */
-            background-image: url('https://images.unsplash.com/photo-1551415943-2402d738236f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
-            
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Arial', sans-serif;
         }
 
-        /* * A custom utility class to add a subtle shadow to text,
-         * making it more readable against a busy background.
-         */
-        .text-shadow {
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+        .number-box {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            margin-bottom: 40px;
+            backdrop-filter: blur(10px);
+        }
+
+        .number-container {
+            display: flex;
+            gap: 5px;
+        }
+
+        .digit-wrapper {
+            width: 70px;
+            height: 100px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .digit-column {
+            position: absolute;
+            width: 100%;
+            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .digit {
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 70px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+        }
+
+        .game-title {
+            font-size: 100px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            margin-bottom: 100px;
+        }
+
+        button {
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+            color: #667eea;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
         }
     </style>
 </head>
-<body class="h-screen w-screen overflow-hidden">
-
-    <!-- 
-      This is the main overlay.
-      It darkens the background image for better text contrast
-      and centers the content vertically and horizontally.
-    -->
-    <div class="absolute inset-0 h-full w-full bg-black/60 p-8">
-        <div class="flex h-full w-full items-center justify-center">
-            
-            <!-- Main Content Box -->
-            <main class="flex max-w-3xl flex-col items-center gap-6 text-center text-white">
-
-                <!-- 1. The Title -->
-                <h1 class="text-shadow text-5xl font-black uppercase tracking-wide md:text-7xl">
-                    <!-- TODO: Replace with your game's title -->
-                    Project Chimera
-                </h1>
-
-                <p class="text-shadow text-xl text-white/80 md:text-2xl">
-                    Help us bring this world to life.
-                </p>
-
-                <!-- 2. The Donation Counter -->
-                <div class="my-4">
-                    <span id="donation-counter" class="text-shadow text-7xl font-black text-emerald-400 md:text-9xl">
-                        $0
-                    </span>
-                    <!-- TODO: Update with your donation goal -->
-                    <p class="text-shadow text-xl font-bold uppercase tracking-wider text-white/90 md:text-3xl">
-                        of $15,000 Raised
-                    </p>
-                </div>
-
-                <!-- 3. The Google Play Button -->
-                <a 
-                  href="https://play.google.com/store/apps"
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  class="mt-6 transform rounded-full bg-emerald-600 px-10 py-4 text-xl font-bold text-white shadow-lg transition-all duration-300 ease-in-out hover:scale-105 hover:bg-emerald-500 hover:shadow-2xl"
-                >
-                  <!-- You can replace this text -->
-                  Get it on Google Play
-                </a>
-
-            </main>
-        </div>
+<body>
+    <div class="game-title">
+        Penguin Rescue
+    </div>
+    
+    <div class="number-box">
+        <div class="number-container" id="numberContainer"></div>
+    </div>
+    
+    <div class="controls">
+        <button onclick="decrementNumber()">-</button>
+        <button onclick="incrementNumber()">+</button>
+        <button onclick="randomNumber()">Random</button>
     </div>
 
     <script>
-        /**
-         * Updates the counter with a new value.
-         * @param {HTMLElement} element - The DOM element to update.
-         * @param {number} value - The new number to display.
-         */
-        function updateCounter(element, value) {
-            // Update the text, formatted as a currency
-            element.textContent = '$' + Math.floor(value).toLocaleString();
+        let currentNumber = 0;
+        const container = document.getElementById('numberContainer');
+        let digitElements = [];
+
+        function createDigitColumn() {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'digit-wrapper';
+            
+            const column = document.createElement('div');
+            column.className = 'digit-column';
+            
+            // Create digits 0-9
+            for (let i = 0; i <= 9; i++) {
+                const digit = document.createElement('div');
+                digit.className = 'digit';
+                digit.textContent = i;
+                column.appendChild(digit);
+            }
+            
+            wrapper.appendChild(column);
+            return { wrapper, column };
         }
 
-        // Wait for the page to load before starting the animation
-        window.addEventListener('DOMContentLoaded', () => {
-            const counterElement = document.getElementById('donation-counter');
+        function updateDisplay(number) {
+            const numStr = Math.abs(number).toString();
+            const digits = numStr.split('');
             
-            // --- TODO: SET YOUR STARTING DONATION AMOUNT HERE ---
-            let currentDonationAmount = 11789;
+            // Add or remove digit columns as needed
+            while (digitElements.length < digits.length) {
+                const { wrapper, column } = createDigitColumn();
+                container.appendChild(wrapper);
+                digitElements.push({ wrapper, column });
+            }
+            while (digitElements.length > digits.length) {
+                const removed = digitElements.pop();
+                container.removeChild(removed.wrapper);
+            }
             
-            // Initial display
-            updateCounter(counterElement, currentDonationAmount);
+            // Update each digit column
+            digits.forEach((digit, index) => {
+                const digitValue = parseInt(digit);
+                const element = digitElements[index];
+                const targetPos = -digitValue * 100;
+                element.column.style.transform = `translateY(${targetPos}px)`;
+            });
+        }
 
-            // Set an interval to dynamically update the counter
-            // It will add a random amount (between 1 and 50) 
-            // every 2.5 seconds (2500ms).
-            setInterval(() => {
-                // Generate a random increment
-                const randomIncrement = Math.floor(Math.random() * 50) + 1;
-                
-                // Add to the current amount
-                currentDonationAmount += randomIncrement;
-                
-                // Update the counter on the page
-                updateCounter(counterElement, currentDonationAmount);
+        function incrementNumber() {
+            currentNumber++;
+            updateDisplay(currentNumber);
+        }
 
-            }, 2500); // Updates every 2.5 seconds
-        });
+        function decrementNumber() {
+            if (currentNumber > 0) {
+                currentNumber--;
+                updateDisplay(currentNumber);
+            }
+        }
+
+        function randomNumber() {
+            currentNumber = Math.floor(Math.random() * 10000);
+            updateDisplay(currentNumber);
+        }
+
+        // Initialize with 0
+        updateDisplay(currentNumber);
     </script>
-
 </body>
 </html>
