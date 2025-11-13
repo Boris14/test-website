@@ -1,0 +1,54 @@
+html, body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  font-family: "Poppins", sans-serif;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1950&q=80') no-repeat center center/cover;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.content {
+  position: relative;
+  text-align: center;
+  z-index: 1;
+}
+
+h1 {
+  font-size: 3rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  letter-spacing: 2px;
+}
+
+.counter {
+  font-size: 5rem;
+  font-weight: 700;
+  display: flex;
+  justify-content: center;
+  gap: 0.2em;
+}
+
+.digit {
+  position: relative;
+  display: inline-block;
+  width: 0.6em;
+  height: 1em;
+  overflow: hidden;
+}
+
+.digit span {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  transition: transform 0.3s ease-in-out;
+}
